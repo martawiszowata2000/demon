@@ -1,0 +1,15 @@
+#ifndef FILETYPE_H
+#define FILETYPE_H
+
+typedef enum {
+  FIFO,
+  SOCKET,
+  UNKNOWN,
+  DIRECTORY,
+  BLOCK_DEVICE,
+  REGULAR_FILE,
+  SYMBOLIC_LINK,
+  CHARACTER_DEVICE
+} FILE_TYPE;
+ 
+#endif
