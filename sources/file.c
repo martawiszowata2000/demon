@@ -49,7 +49,7 @@ bool czy_istnieje(const char *nazwa){
     else return false;
 }
 
-file_list* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne){
+listaPlikow* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne){
     file_list *lista = list_create();
     DIR *katalog;
     struct dirent *wejscie;
