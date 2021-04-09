@@ -28,7 +28,7 @@ bool czy_istnieje(const char *nazwa);
 
 /* Zwraca zawartość katalogu podanego jako parametr
  * oraz jego wszystkich podkatalogów. */
-file_list* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne);
+listaPlikow* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne);
 
 /* Tworzy pusty plik */
 void utworz_pusty_plik(char *sciezka);
