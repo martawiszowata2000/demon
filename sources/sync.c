@@ -9,71 +9,68 @@
 
 
 void sync_all(config c){
-    /* Usuwa pliki których nie ma */
-    remove_files(c);
+    // Usuwa pliki których nie ma w sciezce zrodlowej
+    usun_pliki(c);
 
-    /* Czytanie plików do synchronizacji do listy
-     * oraz tworzenie punktu powrotu (begin) */
-    file_list *list = read_directory(c.source_dir, c.recursive_sync);
-    file_list *begin = list;
+    // Czyta pliki do synchronizacji do listy oraz tworzy punktu powrotu
+    listaPlikow *list = czytaj_zawartosc_katalogu(c.sciezkaZrodlowa, c.rekursywnaSynch);
+    listaPlikow *punktPowrotu = list;
 
     while(list->next != NULL){
         list = list->next;
         bool mmap_on;
 
-        /* Tworzenie pełnej ścieżki docelowej pliku */
-        int len = strlen(list->path) + strlen(list->name) - strlen(c.source_dir) + strlen(c.dest_dir) + 2;
-        char full_dest_path[len];
-        snprintf(full_dest_path, len, "%s%s/%s", c.dest_dir, list->path + strlen(c.source_dir), list->name);
+        // Tworzy pelna sciezke docelowa pliku
+        int len = strlen(list->sciezka) + strlen(list->nazwa) - strlen(c.sciezkaZrodlowa) + strlen(c.sciezkaDocelowa) + 2;
+        char pelnaSciezkaDocelowa[len];
+        snprintf(pelnaSciezkaDocelowa, len, "%s%s/%s", c.sciezkaDocelowa, list->sciezka + strlen(c.sciezkaZrodlowa), list->nazwa);
 
-        /* Tworzenie pełnej ścieżki źródłowej pliku */
-        len = strlen(list->path);
-        len += strlen(list->name) + 2;
-        char full_source_path[len];
-        snprintf(full_source_path, len, "%s/%s", list->path, list->name);
+        // Tworzy pelna sciezke zrodlowa pliku
+        len = strlen(list->sciezka);
+        len += strlen(list->nazwa) + 2;
+        char pelnaSciezkaZrodlowa[len];
+        snprintf(pelnaSciezkaZrodlowa, len, "%s/%s", list->sciezka, list->nazwa);
 
-        /* Sprawdzamy rozmiar pliku */
+        // Sprawdza rozmiar pliku
         struct stat st;
-        stat(full_source_path, &st);
+        stat(pelnaSciezkaZrodlowa, &st);
         int size = st.st_size;
-//        printf("%d\n", size);
-        if(size >= c.mmap_size_threshold) {
-            syslog(LOG_INFO, "Używam mmap");
+        if(size >= c.prog) {
+            syslog(LOG_INFO, "Uzywam mmap");
             mmap_on = true;
         }
 
-        /* Porównywanie timestamp'ów oraz aktualizacja
-         * plików na ich podstawie */
-        if(exists(full_dest_path)){
-            if(list->type == DIRECTORY){
-                if(!compare_timestamp(full_source_path, full_dest_path)){
-                    clone_timestamp(full_source_path, full_dest_path);
+        // Porownuje timestampy oraz aktualizuje pliki na ich podstawie 
+        if(czy_istnieje(pelnaSciezkaDocelowa)){
+            if(list->typ == DIRECTORY){
+                if(!porownaj_timestamp(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa)){
+                    kopiuj_timestamp(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa);
                 }
             }
-            else if(list->type == REGULAR_FILE){
-                if(!compare_timestamp(full_source_path, full_dest_path)){
-                    syslog(LOG_INFO, "Plik nieaktualny, usuwam: %s\n", full_dest_path);
-                    remove(full_dest_path);
-                    syslog(LOG_INFO, "Kopiuje plik do: %s\n", full_dest_path);
-                    copy_file(full_source_path, full_dest_path, mmap_on);
-                    clone_timestamp(full_source_path, full_dest_path);
+            else if(list->typ == REGULAR_FILE){
+                if(!porownaj_timestamp(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa)){
+                    syslog(LOG_INFO, "Plik nieaktualny, usuwam: %s\n", pelnaSciezkaDocelowa);
+                    remove(pelnaSciezkaDocelowa);
+                    syslog(LOG_INFO, "Kopiuje plik do: %s\n", pelnaSciezkaDocelowa);
+                    kopiuj_opcje(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa, mmap_on);
+                    kopiuj_timestamp(pelnaSciezkaZrodlowa, sciezkaDocelowa);
                 }
             }
         }
-        /* Kopiowanie pozostałych plików i/lub katalogów */
+        // Kopiuje pozostale pliki i/lub katalogi
         else{
-            if(list->type == DIRECTORY){
-                syslog(LOG_INFO, "Tworzę katalog: %s\n", full_dest_path);
-                mkdir(full_dest_path, 0700);
-                clone_timestamp(full_source_path, full_dest_path);
+            if(list->typ == DIRECTORY){
+                syslog(LOG_INFO, "Tworzę katalog: %s\n", pelnaSciezkaDocelowa);
+                mkdir(pelnaSciezkaDocelowa, 0700); // 0700 - uzytkownik ma wszystkie prawa
+                kopiuj_timestamp(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa);
             }
             else{
-                syslog(LOG_INFO, "Kopiuje plik do: %s\n", full_dest_path);
-                copy_file(full_source_path, full_dest_path, mmap_on);
-                clone_timestamp(full_source_path, full_dest_path);
+                syslog(LOG_INFO, "Kopiuje plik do: %s\n", pelnaSciezkaDocelowa);
+                kopiuj_opcje(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa, mmap_on);
+                kopiuj_timestamp(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa);
             }
         }
     }
     /* Usuwanie listy */
-    list_remove_all(begin);
+    lista_czysc(punktPowrotu);
 }
