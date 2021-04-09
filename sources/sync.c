@@ -71,6 +71,6 @@ void sync_all(config c){
             }
         }
     }
-    /* Usuwanie listy */
+    // Usuwa listy
     lista_czysc(punktPowrotu);
 }
