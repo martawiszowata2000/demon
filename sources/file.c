@@ -50,7 +50,7 @@ bool czy_istnieje(const char *nazwa){
 }
 
 listaPlikow* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne){
-    file_list *lista = list_create();
+    listaPlikow *lista = lista_utworz();
     DIR *katalog;
     struct dirent *wejscie;
     katalog = opendir(sciezka);
@@ -62,10 +62,10 @@ listaPlikow* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne){
         snprintf(sciezka_szczegol, dlugosc, "%s/%s", sciezka, wejscie->d_name);
         FILE_TYPE typ;
         typ = pobierz_typ_pliku(sciezka_szczegol);
-        if(typ == REGULAR_FILE) list_add(lista, wejscie->d_name, sciezka, typ, true);
+        if(typ == REGULAR_FILE) lista_dodaj(lista, wejscie->d_name, sciezka, typ, true);
         if(typ == DIRECTORY && rekursywne){
-            lista_dodaj(lista, wejscie->d_name, sciezka, typ, true);
-            lista_polacz(lista, czytaj_zawartosc_katalogu(sciezka_szczegol, true));
+            lista_dodaj(*lista, wejscie->d_name, sciezka, typ, true);
+            lista_polacz(*lista, czytaj_zawartosc_katalogu(sciezka_szczegol, true));
         }
     }
     closedir(katalog);
@@ -98,7 +98,7 @@ void kopiuj_plik(char* sciezka_zrodlowy, char* sciezka_docelowy){
      * jest mniejsza niż powinna */
     do {
         bytes_read = read(zrodlo_fd, bufor, sizeof(bufor));
-        write_all(docel_fd, bufor, bytes_read);
+        zapisz_bufor(docel_fd, bufor, bytes_read);
 
         /* Pilnowanie pozycji w pliku */
         offset += bytes_read;
@@ -158,9 +158,9 @@ void usun_pliki(config c){
     /* Tworzenie i odwrócenie listy z plikami
      * katalogu docelowego oraz tworzenie punktu
      * powrotu (begin) */
-    file_list *lista = czytaj_zawartosc_katalogu(c.dest_dir, c.recursive_sync);
-    file_list *lista_odwrocona = lista_odwroc(lista);
-    file_list *poczatek = lista_odwrocona;
+    listaPlikow *lista = czytaj_zawartosc_katalogu(c.sciezkaDocelowa, c.rekursywnaSynch);
+    listaPlikow *lista_odwrocona = lista_odwroc(lista);
+    listaPlikow *poczatek = lista_odwrocona;
     lista_czysc(lista);
 
     while(lista_odwrocona->next != NULL){
