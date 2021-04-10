@@ -53,7 +53,7 @@ void sync_all(config c){
                     remove(pelnaSciezkaDocelowa);
                     syslog(LOG_INFO, "Kopiuje plik do: %s\n", pelnaSciezkaDocelowa);
                     kopiuj_opcje(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa, mmap_on);
-                    kopiuj_timestamp(pelnaSciezkaZrodlowa, sciezkaDocelowa);
+                    kopiuj_timestamp(pelnaSciezkaZrodlowa, pelnaSciezkaDocelowa);
                 }
             }
         }
