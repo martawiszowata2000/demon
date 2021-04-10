@@ -64,8 +64,8 @@ listaPlikow* czytaj_zawartosc_katalogu(char *sciezka, bool rekursywne){
         typ = pobierz_typ_pliku(sciezka_szczegol);
         if(typ == REGULAR_FILE) lista_dodaj(lista, wejscie->d_name, sciezka, typ, true);
         if(typ == DIRECTORY && rekursywne){
-            lista_dodaj(*lista, wejscie->d_name, sciezka, typ, true);
-            lista_polacz(*lista, czytaj_zawartosc_katalogu(sciezka_szczegol, true));
+            lista_dodaj(lista, wejscie->d_name, sciezka, typ, true);
+            lista_polacz(lista, czytaj_zawartosc_katalogu(sciezka_szczegol, true));
         }
     }
     closedir(katalog);
@@ -117,7 +117,7 @@ void kopiuj_duzy_plik(char *sciezka_zrodlowy, char *sciezka_docelowy){
 
     /* Plik źródłowy */
     zrodlo_fd = open(sciezka_zrodlowy, O_RDONLY);
-    filesize = lseek(zrodlo_fd, 0, SEEK_END);
+    rozmiar = lseek(zrodlo_fd, 0, SEEK_END);
     zrodlo = mmap(NULL, rozmiar, PROT_READ, MAP_PRIVATE, zrodlo_fd, 0);
 
     /* Plik docelowy */
