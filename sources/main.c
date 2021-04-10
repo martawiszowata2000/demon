@@ -149,7 +149,7 @@ int main(int argc, char *argv[]){
     c.sciezkaZrodlowa = realpath(c.sciezkaZrodlowa, bufor_a);
     c.sciezkaDocelowa = realpath(c.sciezkaDocelowa, bufor_b);
 
-    if(contains(c.sciezkaZrodlowa, c.sciezkaDocelowa)){
+    if(czy_zawiera(c.sciezkaZrodlowa, c.sciezkaDocelowa)){
         printf("BLAD: katalogi nie moga sie zawierac\n");
         return EXIT_FAILURE;
     }
