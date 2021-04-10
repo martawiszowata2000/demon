@@ -130,8 +130,8 @@ void kopiuj_duzy_plik(char *sciezka_zrodlowy, char *sciezka_docelowy){
     munmap(zrodlo, rozmiar);
     munmap(docelowe, rozmiar);
 
-    close(zrodlo);
-    close(docelowe);
+    close(zrodlo_fd);
+    close(docel_fd);
 }
 
 void kopiuj_opcje(char *sciezka_zrodlowy, char *sciezka_docelowy, bool czy_duzy_plik){
