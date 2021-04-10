@@ -17,7 +17,7 @@ listaPlikow *lista_dodaj(listaPlikow *lista, char *nazwa, char *sciezka, FILE_TY
     strcpy(lista->nazwa, nazwa);
     lista->sciezka = malloc(strlen(sciezka)+1);
     strcpy(lista->sciezka, sciezka);
-    lista->mmap = mmap;
+    lista->czyMmap = mmap;
     lista->next = NULL;
     lista->typ = typ;
     return lista;
@@ -55,7 +55,7 @@ listaPlikow *lista_odwroc(listaPlikow *lista){
         strcpy(first->nazwa, lista->nazwa);
         first->sciezka = malloc(strlen(lista->sciezka)+1);
         strcpy(first->sciezka, lista->sciezka);
-        first->mmap = lista->mmap;
+        first->czyMmap = lista->czyMmap;
         first->typ = lista->typ;
     }
     next = first;
