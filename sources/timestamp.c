@@ -2,7 +2,7 @@
 #include <sys/stat.h>
 #include <utime.h>
 
-void kopiuj_timestamp(char* sciezka_zrodlowy, char* sciezka_docelowy);
+void kopiuj_timestamp(char* sciezka_zrodlowy, char* sciezka_docelowy){
     struct stat st;
     struct utimbuf new_times;
     stat(sciezka_zrodlowy, &st);
