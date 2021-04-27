@@ -6,18 +6,18 @@
 int parse_time(const char *czas){
     int sekundy = 0;
     for(int i=0; i<strlen(czas)-1; i++){
-        if(czas[i] >=48 && czas[i] <= 57){ // Sprawdza czy znak jest cyfra
+        if(czas[i] >=48 && czas[i] <= 57){ 
             sekundy *= 10;
-            sekundy += (czas[i]-48); // Dopisanie cyfry na koniec liczby
+            sekundy += (czas[i]-48); 
         }
-        else return -1; // Blad, ciąg zawiera niedozwolone znaki
+        else return -1; 
     }
-    char ostatni = czas[strlen(czas)-1]; // Ostatni znak ciągu
-    if(ostatni >=48 && ostatni <= 57){ // Jezeli jest cyfra to dodajemy
+    char ostatni = czas[strlen(czas)-1]; 
+    if(ostatni >=48 && ostatni <= 57){ 
         sekundy *= 10;
         sekundy += (ostatni-48);
     }
-    else { // Jezeli nie, to mnozymy przez odpowiedni mnoznik
+    else { 
         switch (ostatni) {
         case 's':
             // sekundy - nic nie zmieniamy
@@ -29,7 +29,7 @@ int parse_time(const char *czas){
             sekundy *= 3600; // 60s * 60m = 1h
             break;
         default:
-            return -1; // Blad, niedozwolony znak
+            return -1; // bledny znak
             break;
         }
     }
@@ -39,14 +39,14 @@ int parse_time(const char *czas){
 size_t parse_size(const char *rozmiar){
     size_t bity = 0;
     for(int i=0; i<strlen(rozmiar)-1; i++){
-        if(rozmiar[i] >=48 && rozmiar[i] <= 57){ // Sprawdza czy znak jest cyfra
+        if(rozmiar[i] >=48 && rozmiar[i] <= 57){ 
             bity *= 10;
-            bity += (rozmiar[i]-48); // Dopisanie cyfry na koniec liczby
+            bity += (rozmiar[i]-48); 
         }
-        else return -1; // Blad, ciag zawiera niedozwolone znaki
+        else return -1; /
     }
-    char ostatni = rozmiar[strlen(rozmiar)-1]; // Ostatni znak ciagu
-    if(ostatni >=48 && ostatni <= 57){ // Jeżeli jest cyfra to dodajemy
+    char ostatni = rozmiar[strlen(rozmiar)-1]; 
+    if(ostatni >=48 && ostatni <= 57){ 
         bity *= 10;
         bity += (ostatni-48);
     }
@@ -68,7 +68,7 @@ size_t parse_size(const char *rozmiar){
             break;
 
         default:
-            return -1; // Błąd, niedozwolony znak
+            return -1; // bledny znak
             break;
         }
     }
@@ -78,20 +78,20 @@ size_t parse_size(const char *rozmiar){
 config parse_args(int argc, char *argv[]){
     config c = domyslna_konfiguracja();
     if(argc <3) return c;
-    int il_katalogow = 0; // Ilość katalogów w parametrach
+    int il_katalogow = 0;
     for(int i=1; i<argc; i++){
         char *arg = argv[i];
         if(arg[0] == '-'){
             char opcja = arg[1];
             if(strlen(arg) != 2){
-                printf("BLAD: nieznana opcja: %s\n", arg);
+                printf("blad - niepoprawna opcja: %s\n", arg);
                 return c;
             }
             switch (opcja) {
             case 's':
                 c.czasSpania = parse_time(argv[i+1]);
                 if(c.czasSpania == -1){
-                    printf("BLAD: nieprawidlowy format czasu: %s\n", argv[i+1]);
+                    printf("blad - niepoprawny format czasu: %s\n", argv[i+1]);
                     return c;
                 }
                 i++;
@@ -104,14 +104,14 @@ config parse_args(int argc, char *argv[]){
             case 'm':
                 c.prog = parse_size(argv[i+1]);
                 if(c.prog == -1){
-                    printf("BLAD: nieprawidlowy format rozmiaru: %s\n", argv[i+1]);
+                    printf("blad - niepoprawny format rozmiaru: %s\n", argv[i+1]);
                     return c;
                 }
                 i++;
                 break;
 
             default:
-                printf("BLAD: nieznana opcja %c\n", opcja);
+                printf("blad - niepoprawna opcja %c\n", opcja);
                 return c;
                 break;
             }
