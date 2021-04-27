@@ -24,7 +24,7 @@ bool SYNC_IN_PROGRESS = false;
 bool TIME_TO_DIE = false;
 
 //funkcja forkujaca rodzica
-void widelec(){
+void custom_fork(){
     syslog(LOG_INFO, "Forkowanie procesu");
     //forkowanie rodzica
     pid_t pid, sid;
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]){
 
     openlog("demon_log", LOG_PID | LOG_CONS, LOG_USER);
     syslog(LOG_INFO, "Start programu");
-    widelec();
+    custom_fork();
 
     if(blokuj(true) != 0){
         syslog(LOG_CRIT, "blad - pliku blokady nie moze zostac zablokowany ");
