@@ -4,7 +4,7 @@
 void help(bool full){
     printf("Poprawne uzycie programu:\n\n");
     printf("1. Aby uruchomic demona i zaczac synchronizacje:\n");
-    printf(" demon <sciezka zrodlowa> <sciezka docelowa> [opcje]\n\n");
+    printf("demon <sciezka zrodlowa> <sciezka docelowa> [opcje]\n\n");
     printf("2. Aby wymusic synchronizacje lub zatrzymac uruchomionego demona:\n");
     printf("demon <opcja>\n\n");
 
