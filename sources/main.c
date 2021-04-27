@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h> // EXIT_SUCCESS i EXIT_FAILURE
-//#include <sys/types.h>
+#include <stdlib.h> 
+#include <sys/types.h>
 #include <sys/stat.h> // umask
-#include <syslog.h> // syslogów
+#include <syslog.h> 
 #include <dirent.h> // opendir
-#include <unistd.h> // fork
+#include <unistd.h> 
 #include <string.h>
 #include <sys/file.h>
 #include <errno.h>
@@ -30,7 +30,7 @@ void widelec(){
     pid_t pid, sid;
     pid = fork();
     if(pid < 0){
-        syslog(LOG_CRIT, "BLAD: nie udalo sie rozdzielic procesu");
+        syslog(LOG_CRIT, "blad - nie udalo sie rozdzielic procesu");
         exit(EXIT_FAILURE);
     }
     if(pid > 0){
@@ -41,7 +41,7 @@ void widelec(){
     //tworzenie SIDa dla dziecka
     sid = setsid();
     if(sid < 0){
-        syslog(LOG_CRIT, "BLAD: nie mozna utworzyc SID dla procesu potomnego");
+        syslog(LOG_CRIT, "blad - nie mozna utworzyc SID dla procesu potomnego");
         exit(EXIT_FAILURE);
     }
     //zmiana katalogu
