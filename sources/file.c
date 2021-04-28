@@ -76,7 +76,7 @@ void utworz_pusty_plik(char* sciezka){
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH; // uprawnienia do pliku
     int fd = open(sciezka, O_WRONLY | O_EXCL | O_CREAT, mode); // tworzenie pliku
     if (fd == -1) {
-        syslog(LOG_CRIT, "BLAD: nie mozna utworzyc pliku");
+        syslog(LOG_CRIT, "blad - nie mozna stworzyc pliku");
         exit(EXIT_FAILURE);
     }
     close(fd);
