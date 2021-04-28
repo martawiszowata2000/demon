@@ -17,7 +17,6 @@ bool katalog_uprawnienia_error(const char *nazwa);
 bool czy_zawiera(const char *katalog1, const char *katalog2);
 
 // Dziala tak samo jak katalog_uprawnienia_error, ale nie wyświetla komunikatu
- * Nie wyświetla żadnych komunikatów. */
 bool katalog_uprawnienia(const char *nazwa);
 
 // Sprawdza czy plik istnieje
