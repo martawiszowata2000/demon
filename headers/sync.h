@@ -6,7 +6,7 @@
 #include "config.h"
 
 
-/*Zbiera wszystkie funkcje do kupy*/
+// synchronizuje dwa katalogi
 void sync_all(config c);
 
 #endif
