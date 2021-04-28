@@ -20,7 +20,7 @@ FILE_TYPE pobierz_typ_pliku(const char *sciezka){
     else if(S_ISFIFO(st.st_mode))return FIFO;
     else if(S_ISSOCK(st.st_mode))return SOCKET;
     else if(S_ISREG(st.st_mode)) return REGULAR_FILE;
-    else return UNKNOWN;
+    else return UNKNOWN;//
 }
 
 bool katalog_uprawnienia_error(const char *nazwa){
