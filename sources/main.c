@@ -36,19 +36,19 @@ void custom_fork(){
     if(pid > 0){
         exit(EXIT_SUCCESS);
     }
-    //zmiana maski plikow
+    //Zmienia maski plików
     umask(0);
-    //stworzenie SID dla dziecka
+    //Tworzy SID dla dziecka
     sid = setsid();
     if(sid < 0){
         syslog(LOG_CRIT, "blad - do procesu potomnego nie mozna stworzyc SID");
         exit(EXIT_FAILURE);
     }
-    //zmiana katalogu
+    //Zmienia katalog
     if((chdir("/")) < 0) {
         syslog(LOG_CRIT, "blad - nie mozna zmienic biezacego katalogu");
     }
-    //zamykanie STD
+    //Zamyka STD
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
@@ -63,13 +63,13 @@ int blokuj(bool lock){
         lockp.l_type = lock;
         if(fcntl(lock_file, F_SETLKW, &lockp) != -1){
             syslog(LOG_INFO, "plik blokady zostal pomyslnie zablokowany: /tmp/demon.lock");
-            return 0; // Udalo sie zablokowac
+            return 0;
         }
         else{
-            return -1; // Nie Udalo sie zablokowac
+            return -1;
         }
     }
-    else return lockp.l_pid; // Zwraca pid procesu ktory zalozyl blokade
+    else return lockp.l_pid; // Zwraca pid procesu ktory zablokowal
 }
 
 void sig_force_sync(){
